@@ -12,6 +12,13 @@ export async function importDataForCollection(filePath, Model) {
     }
 
     for (const record of records) {
+      const existingRecord = await Model.findOne({ uniqueColumnName: record.uniqueColumnName });
+
+      if (existingRecord) {
+        console.log(`Skipping import for ${Model.modelName} with unique column value ${record.uniqueColumnName} as it already exists.`);
+        continue;
+      }
+
       await Model.create(record);
       console.log(`${Model.modelName} imported successfully`);
     }

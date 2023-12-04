@@ -1,9 +1,16 @@
-// trainController.js
-const getAllTrains = (req, res) => {
-    console.log('Controller: Get all trains');
-    // Logique pour obtenir tous les trains depuis la base de données
-    // Envoyer la réponse appropriée
-  };
+import Trains from '../models/Trains.js';
+import {isValidObjectId} from '../utils/isValidObjectId.js';
+
+const getAllTrains = async(req, res) => {
+  try {      
+    const trains = await Trains.find();
+
+    res.json({ trains });
+  } catch (error) {
+      console.error('Error getting trains:', error);
+      res.status(500).json({ message: 'Erreur lors de la récupération des trains.' });
+  }
+};
   
   const getTrainById = (req, res) => {
     console.log('Controller: Get train by ID');

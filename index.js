@@ -16,6 +16,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 connectDB();
+
 await importDataForCollection('./datas/users.csv', Users);
 await importDataForCollection('./datas/trains.csv', Trains);
 await importDataForCollection('./datas/stations.csv', Stations);
