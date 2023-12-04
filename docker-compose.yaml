@@ -1,0 +1,8 @@
+services:
+  railroad:
+    image: mongo:7.0.4-jammy
+    container_name: railroad-db
+    ports:
+      - "27017:27017"
+volumes:
+  mongodb_data:
