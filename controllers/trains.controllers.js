@@ -1,5 +1,4 @@
 import Trains from '../models/Trains.js';
-import {isValidObjectId} from '../utils/isValidObjectId.js';
 
 const getAllTrains = async (req, res) => {
   try {
@@ -23,15 +22,11 @@ const getAllTrains = async (req, res) => {
 };
 
   
-const getTrainById = async (req, res) => {
+const getTrainByName = async (req, res) => {
   try {
-    const trainId = req.params.trainId;
+    const trainName = req.params.trainName;
 
-    if (!isValidObjectId(trainId)) {
-      return res.status(400).json({ message: 'ID du train non valide.' });
-    }
-
-    const train = await Trains.findById(trainId);
+    const train = await Trains.findOne({name: trainName});
 
     if (!train) {
       return res.status(404).json({ message: 'Train non trouvé.' });
@@ -76,11 +71,11 @@ const updateTrain = async (req, res) => {
       return res.status(403).json({ message: 'Seulement un admin peut update un train.' });
     }
 
-    const trainId = req.params.trainId;
+    const trainName = req.params.trainName;
 
     const { name, start_station, end_station, time_of_departure } = req.body;
 
-    const trainToUpdate = await Trains.findById(trainId);
+    const trainToUpdate = await Trains.findOne({name: trainName});
 
     if (!trainToUpdate) {
       return res.status(404).json({ message: 'Train non trouvée.' });
@@ -107,9 +102,9 @@ const deleteTrain = async (req, res) => {
       return res.status(403).json({ message: 'Seulement un admin peut delete un train.' });
     }
 
-    const trainId = req.params.trainId;
+    const trainName = req.params.trainName;
 
-    const trainToDelete = await Trains.findById(trainId);
+    const trainToDelete = await Trains.findOne({name: trainName});
 
     if (!trainToDelete) {
       return res.status(404).json({ message: 'Train non trouvée.' });
@@ -124,5 +119,5 @@ const deleteTrain = async (req, res) => {
   }
 };
   
-  export { getAllTrains, getTrainById, createTrain, updateTrain, deleteTrain };
+  export { getAllTrains, getTrainByName, createTrain, updateTrain, deleteTrain };
   

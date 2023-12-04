@@ -1,5 +1,4 @@
 import Stations from '../models/Stations.js';
-import { isValidObjectId } from '../utils/isValidObjectId.js';
 
 const getAllStations = async (req, res) => {
   try {      
@@ -12,15 +11,11 @@ const getAllStations = async (req, res) => {
   }
 };
   
-const getStationById = async (req, res) => {
+const getStationByName = async (req, res) => {
   try {
-    const stationId = req.params.stationId;
+    const stationName = req.params.stationName;
 
-    if (!isValidObjectId(stationId)) {
-      return res.status(400).json({ message: 'ID de la station non valide.' });
-    }
-
-    const station = await Stations.findById(stationId);
+    const station = await Stations.findOne({name: stationName});
 
     if (!station) {
       return res.status(404).json({ message: 'Station non trouvée.' });
@@ -65,11 +60,11 @@ const updateStation = async (req, res) => {
       return res.status(403).json({ message: 'Seulement un admin peut update une station.' });
     }
 
-    const stationId = req.params.stationId;
+    const stationName = req.params.stationName;
 
     const { name, open_hour, close_hour, image } = req.body;
 
-    const stationToUpdate = await Stations.findById(stationId);
+    const stationToUpdate = await Stations.findOne({name: stationName});
 
     if (!stationToUpdate) {
       return res.status(404).json({ message: 'Station non trouvée.' });
@@ -96,9 +91,9 @@ const deleteStation = async (req, res) => {
       return res.status(403).json({ message: 'Seulement un admin peut delete une station.' });
     }
 
-    const stationId = req.params.stationId;
+    const stationName = req.params.stationName;
 
-    const stationToDelete = await Stations.findById(stationId);
+    const stationToDelete = await Stations.findOne({name: stationName});
 
     if (!stationToDelete) {
       return res.status(404).json({ message: 'Station non trouvée.' });
@@ -113,7 +108,5 @@ const deleteStation = async (req, res) => {
   }
 };
 
-
-  
-  export { getAllStations, getStationById, createStation, updateStation, deleteStation };
+  export { getAllStations, getStationByName, createStation, updateStation, deleteStation };
   

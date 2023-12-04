@@ -1,4 +1,2 @@
 email,pseudo,password,role
-user1@example.com,user1,password,user
-user2@example.com,user2,password,user
-admin@example.com,admin,password,admin
+admin@example.com,admin,$2b$10$LEJXIKZ1bvU6xrwMd5k7Fe64cyFnS7g8j1CAVuZ6a5vAVN1telpq6,admin

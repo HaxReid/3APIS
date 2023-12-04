@@ -1,20 +1,18 @@
 // trainRoutes.js
 import express from 'express';
-import { getAllTrains, getTrainById, createTrain, updateTrain, deleteTrain } from '../controllers/trains.controllers.js';
+import { getAllTrains, getTrainByName, createTrain, updateTrain, deleteTrain } from '../controllers/trains.controllers.js';
 import authenticate from '../middleware/auth.js';
 
 const trainsRoutes = express.Router();
 
 trainsRoutes.get('/', getAllTrains);
 
-trainsRoutes.get('/:trainId', getTrainById);
+trainsRoutes.get('/:trainName', getTrainByName);
 
-trainsRoutes.use(authenticate);
+trainsRoutes.post('/', authenticate, createTrain);
 
-trainsRoutes.post('/', createTrain);
+trainsRoutes.put('/:trainName', authenticate, updateTrain);
 
-trainsRoutes.put('/:trainId', updateTrain);
-
-trainsRoutes.delete('/:trainId', deleteTrain);
+trainsRoutes.delete('/:trainName', authenticate, deleteTrain);
 
 export default trainsRoutes;
