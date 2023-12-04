@@ -8,10 +8,10 @@ stationsRoutes.get('/', getAllStations);
 
 stationsRoutes.get('/:stationName', getStationByName);
 
-stationsRoutes.post('/', authenticate, createStation);
+stationsRoutes.post('/',  createStation);
 
-stationsRoutes.put('/:stationName', authenticate, updateStation);
+stationsRoutes.put('/:stationName',  updateStation);
 
-stationsRoutes.delete('/:stationName', authenticate, deleteStation);
+stationsRoutes.delete('/:stationName',  deleteStation);
 
 export default stationsRoutes;

@@ -9,10 +9,10 @@ trainsRoutes.get('/', getAllTrains);
 
 trainsRoutes.get('/:trainName', getTrainByName);
 
-trainsRoutes.post('/', authenticate, createTrain);
+trainsRoutes.post('/',  createTrain);
 
-trainsRoutes.put('/:trainName', authenticate, updateTrain);
+trainsRoutes.put('/:trainName',  updateTrain);
 
-trainsRoutes.delete('/:trainName', authenticate, deleteTrain);
+trainsRoutes.delete('/:trainName',  deleteTrain);
 
 export default trainsRoutes;

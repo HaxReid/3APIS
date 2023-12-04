@@ -12,9 +12,9 @@ usersRoutes.post('/login', loginUser);
 
 usersRoutes.post('/', createUser);
 
-usersRoutes.put('/:userEmail', authenticate, updateUser);
+usersRoutes.put('/:userEmail',  updateUser);
 
-usersRoutes.delete('/:userEmail', authenticate, deleteUser);
+usersRoutes.delete('/:userEmail',  deleteUser);
 
 
 export default usersRoutes;

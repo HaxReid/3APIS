@@ -21,19 +21,26 @@ const getAllUsers = async (req, res) => {
   const getOneUser = async (req, res) => {
     try {
       const userEmail = req.params.userEmail; 
-  
+      const currentUserEmail = req.user.email;
+      const currentUserRole = req.user.role;
+
       const user = await Users.findOne({ email: userEmail });
-  
+
       if (!user) {
         return res.status(404).json({ message: 'Utilisateur non trouvé.' });
       }
-  
+
+      if (!(currentUserRole === 'admin' || currentUserEmail === userEmail)) {
+        return res.status(403).json({ message: 'Vous n\'avez pas la permission de voir cet utilisateur.' });
+      }
+
       res.json(user);
     } catch (error) {
       console.error('Erreur lors de la récupération de l\'utilisateur par e-mail:', error);
       res.status(500).json({ message: 'Erreur serveur lors de la récupération de l\'utilisateur par e-mail.' });
     }
 };
+
   
 const createUser = async (req, res) => {
   try {
@@ -56,12 +63,14 @@ const createUser = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    res.json({ token, user: savedUser});
+    res.json({ token, user: savedUser });
   } catch (error) {
     console.error('Erreur lors de la création de l\'utilisateur :', error);
     res.status(500).json({ message: 'Erreur lors de la création de l\'utilisateur.' });
   }
 };
+
+
 
 const updateUser = async (req, res) => {
   try {
@@ -152,6 +161,7 @@ const loginUser = async (req, res) => {
     res.status(500).json({ message: 'Erreur lors de la connexion.' });
   }
 };
+
 
 
   export { getAllUsers, getOneUser, createUser, updateUser, deleteUser, loginUser };
