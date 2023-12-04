@@ -22,11 +22,11 @@ const getAllTrains = async (req, res) => {
 };
 
   
-const getTrainByName = async (req, res) => {
+const getOneTrain = async (req, res) => {
   try {
-    const trainName = req.params.trainName;
+    const trainId = req.params.trainId;
 
-    const train = await Trains.findOne({name: trainName});
+    const train = await Trains.findById(trainId);
 
     if (!train) {
       return res.status(404).json({ message: 'Train non trouvé.' });
@@ -71,11 +71,11 @@ const updateTrain = async (req, res) => {
       return res.status(403).json({ message: 'Seulement un admin peut update un train.' });
     }
 
-    const trainName = req.params.trainName;
+    const trainId = req.params.trainId;
 
     const { name, start_station, end_station, time_of_departure } = req.body;
 
-    const trainToUpdate = await Trains.findOne({name: trainName});
+    const trainToUpdate = await Trains.findById(trainId);
 
     if (!trainToUpdate) {
       return res.status(404).json({ message: 'Train non trouvée.' });
@@ -102,9 +102,9 @@ const deleteTrain = async (req, res) => {
       return res.status(403).json({ message: 'Seulement un admin peut delete un train.' });
     }
 
-    const trainName = req.params.trainName;
+    const trainId = req.params.trainId;
 
-    const trainToDelete = await Trains.findOne({name: trainName});
+    const trainToDelete = await Trains.findById(trainId);
 
     if (!trainToDelete) {
       return res.status(404).json({ message: 'Train non trouvée.' });
@@ -119,5 +119,5 @@ const deleteTrain = async (req, res) => {
   }
 };
   
-  export { getAllTrains, getTrainByName, createTrain, updateTrain, deleteTrain };
+  export { getAllTrains, getOneTrain, createTrain, updateTrain, deleteTrain };
   

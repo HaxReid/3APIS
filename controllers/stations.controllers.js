@@ -11,11 +11,11 @@ const getAllStations = async (req, res) => {
   }
 };
   
-const getStationByName = async (req, res) => {
+const getOneStation = async (req, res) => {
   try {
-    const stationName = req.params.stationName;
+    const stationId = req.params.stationId;
 
-    const station = await Stations.findOne({name: stationName});
+    const station = await Stations.findById(stationId);
 
     if (!station) {
       return res.status(404).json({ message: 'Station non trouvée.' });
@@ -60,11 +60,11 @@ const updateStation = async (req, res) => {
       return res.status(403).json({ message: 'Seulement un admin peut update une station.' });
     }
 
-    const stationName = req.params.stationName;
+    const stationId = req.params.stationId;
 
     const { name, open_hour, close_hour, image } = req.body;
 
-    const stationToUpdate = await Stations.findOne({name: stationName});
+    const stationToUpdate = await Stations.findById(stationId);
 
     if (!stationToUpdate) {
       return res.status(404).json({ message: 'Station non trouvée.' });
@@ -91,9 +91,9 @@ const deleteStation = async (req, res) => {
       return res.status(403).json({ message: 'Seulement un admin peut delete une station.' });
     }
 
-    const stationName = req.params.stationName;
+    const stationId = req.params.stationId;
 
-    const stationToDelete = await Stations.findOne({name: stationName});
+    const stationToDelete = await Stations.findById(stationId);
 
     if (!stationToDelete) {
       return res.status(404).json({ message: 'Station non trouvée.' });
@@ -108,5 +108,5 @@ const deleteStation = async (req, res) => {
   }
 };
 
-  export { getAllStations, getStationByName, createStation, updateStation, deleteStation };
+  export { getAllStations, getOneStation, createStation, updateStation, deleteStation };
   

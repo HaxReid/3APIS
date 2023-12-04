@@ -20,27 +20,30 @@ const getAllUsers = async (req, res) => {
   
   const getOneUser = async (req, res) => {
     try {
-      const userEmail = req.params.userEmail; 
-      const currentUserEmail = req.user.email;
+      const userId = req.params.userId; 
+      const currentUserId = req.user.userId;
       const currentUserRole = req.user.role;
 
-      const user = await Users.findOne({ email: userEmail });
+      if (!isValidObjectId(userId)) {
+        return res.status(400).json({ message: 'ID de l\'utilisateur non valide.' });
+      }
+
+      const user = await Users.findById(userId);
 
       if (!user) {
         return res.status(404).json({ message: 'Utilisateur non trouvé.' });
       }
 
-      if (!(currentUserRole === 'admin' || currentUserEmail === userEmail)) {
+      if (!(currentUserRole === 'admin' || currentUserId === userId)) {
         return res.status(403).json({ message: 'Vous n\'avez pas la permission de voir cet utilisateur.' });
       }
 
       res.json(user);
     } catch (error) {
-      console.error('Erreur lors de la récupération de l\'utilisateur par e-mail:', error);
-      res.status(500).json({ message: 'Erreur serveur lors de la récupération de l\'utilisateur par e-mail.' });
+      console.error('Erreur lors de la récupération de l\'utilisateur par ID:', error);
+      res.status(500).json({ message: 'Erreur serveur lors de la récupération de l\'utilisateur par ID.' });
     }
 };
-
   
 const createUser = async (req, res) => {
   try {
@@ -58,17 +61,18 @@ const createUser = async (req, res) => {
     const savedUser = await newUser.save();
 
     const token = jwt.sign(
-      { email: savedUser.email, role: savedUser.role },
+      { userId: savedUser._id, email: savedUser.email, role: savedUser.role, pseudo: savedUser.pseudo },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    res.json({ token, user: savedUser });
+    res.json({ token, user: { userId: savedUser._id, email: savedUser.email, role: savedUser.role, pseudo: savedUser.pseudo } });
   } catch (error) {
     console.error('Erreur lors de la création de l\'utilisateur :', error);
     res.status(500).json({ message: 'Erreur lors de la création de l\'utilisateur.' });
   }
 };
+
 
 
 
@@ -106,20 +110,21 @@ const updateUser = async (req, res) => {
     res.status(500).json({ message: 'Erreur lors de la mise à jour de l\'utilisateur.' });
   }
 };
+
   
 const deleteUser = async (req, res) => {
   try {
-    const userEmailToDelete = req.params.userEmail;
-    const currentUserEmail = req.user.email;
+    const userIdToDelete = req.params.userId;
+    const currentUserId = req.user.userId;
     const currentUserRole = req.user.role;
 
-    const userToDelete = await Users.findOne({ email: userEmailToDelete });
+    const userToDelete = await Users.findById(userIdToDelete);
 
     if (!userToDelete) {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
 
-    if (!(currentUserRole === 'admin' || currentUserEmail === userEmailToDelete)) {
+    if (!(currentUserRole === 'admin' || currentUserId === userIdToDelete)) {
       return res.status(403).json({ message: 'Vous n\'avez pas la permission de supprimer cet utilisateur.' });
     }
 
@@ -131,7 +136,6 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ message: 'Erreur lors de la suppression de l\'utilisateur.' });
   }
 };
-
   
 const loginUser = async (req, res) => {
   try {
@@ -150,18 +154,17 @@ const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { email: user.email, role: user.role },
+      { userId: user._id, email: user.email, role: user.role, pseudo: user.pseudo },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    res.json({ token, user: { email: user.email, role: user.role } });
+    res.json({ token, user: { userId: user._id, email: user.email, role: user.role, pseudo: user.pseudo } });
   } catch (error) {
     console.error('Erreur lors de la connexion :', error);
     res.status(500).json({ message: 'Erreur lors de la connexion.' });
   }
 };
-
 
 
   export { getAllUsers, getOneUser, createUser, updateUser, deleteUser, loginUser };

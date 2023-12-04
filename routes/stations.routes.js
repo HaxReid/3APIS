@@ -1,17 +1,17 @@
 import express from 'express';
-import { getAllStations, getStationByName, createStation, updateStation, deleteStation } from '../controllers/stations.controllers.js';
-import authenticate from '../middleware/auth.js';
+import { getAllStations, getOneStation, createStation, updateStation, deleteStation } from '../controllers/stations.controllers.js';
+import {authenticateRole} from '../middleware/auth.js';
 
 const stationsRoutes = express.Router();
 
 stationsRoutes.get('/', getAllStations);
 
-stationsRoutes.get('/:stationName', getStationByName);
+stationsRoutes.get('/:stationId', getOneStation);
 
-stationsRoutes.post('/',  createStation);
+stationsRoutes.post('/', authenticateRole, createStation);
 
-stationsRoutes.put('/:stationName',  updateStation);
+stationsRoutes.put('/:stationId', authenticateRole, updateStation);
 
-stationsRoutes.delete('/:stationName',  deleteStation);
+stationsRoutes.delete('/:stationId',  authenticateRole, deleteStation);
 
 export default stationsRoutes;

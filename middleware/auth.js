@@ -9,20 +9,44 @@ const authenticate = (req, res, next) => {
     return res.status(401).json({ message: 'Accès non autorisé. Token manquant.' });
   }
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    req.user = decoded;
-
-    if (req.user.role !== 'admin' && req.user.role !== 'user') {
-      return res.status(403).json({ message: 'Accès non autorisé. Rôle non valide.' });
+  console.log('token', token)
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      console.log(err)
+      return res.status(401).json({ error: 'Unauthorized' });
     }
-
+    req.user = user;
     next();
-  } catch (error) {
-    console.error(error);
-    return res.status(401).json({ message: 'Accès non autorisé. Token invalide.' });
-  }
+  });
 };
 
-export default authenticate;
+const authenticateRole = (req, res, next) => {
+  const token = req.header('Authorization');
+
+  if (!token) {
+    return res.status(401).json({ message: 'Accès non autorisé. Token manquant.' });
+  }
+
+  const userRole = getRoleFromToken(token);
+
+  if (!userRole) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  req.userRole = userRole;
+
+  next();
+};
+
+
+const getRoleFromToken = (token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    return decoded.role;
+  } catch (error) {
+    console.error('Erreur lors de la récupération du rôle à partir du jeton :', error);
+    return null;
+  }
+};
+export { authenticate, authenticateRole };
