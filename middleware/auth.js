@@ -14,7 +14,7 @@ const authenticate = (req, res, next) => {
 
     req.user = decoded;
 
-    if (req.user.role !== 'admin' && req.user.role !== 'employee' && req.user.role !== 'user') {
+    if (req.user.role !== 'admin' && req.user.role !== 'user') {
       return res.status(403).json({ message: 'Accès non autorisé. Rôle non valide.' });
     }
 
