@@ -35,6 +35,11 @@ const getStationById = async (req, res) => {
 
 const createStation = async (req, res) => {
   try {
+
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Seulement un admin peut create une station.' });
+    }
+
     const { name, open_hour, close_hour, image } = req.body;
 
     const newStation = new Stations({
@@ -55,6 +60,11 @@ const createStation = async (req, res) => {
 
 const updateStation = async (req, res) => {
   try {
+
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Seulement un admin peut update une station.' });
+    }
+
     const stationId = req.params.stationId;
 
     const { name, open_hour, close_hour, image } = req.body;
@@ -81,9 +91,14 @@ const updateStation = async (req, res) => {
 
 const deleteStation = async (req, res) => {
   try {
+
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Seulement un admin peut delete une station.' });
+    }
+
     const stationId = req.params.stationId;
 
-    const stationToDelete = await Station.findById(stationId);
+    const stationToDelete = await Stations.findById(stationId);
 
     if (!stationToDelete) {
       return res.status(404).json({ message: 'Station non trouvée.' });
