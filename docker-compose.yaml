@@ -2,7 +2,18 @@ services:
   railroad:
     image: mongo:7.0.4-jammy
     container_name: railroad-db
+    volumes:
+      - mongodb_data:/data/db
     ports:
       - "27017:27017"
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    environment:
+      - SWAGGER_JSON=/app/swagger/swagger.yaml
+    volumes:
+      - ./railroad.yaml:/app/swagger/swagger.yaml
+    ports:
+      - 8080:8080
+
 volumes:
   mongodb_data:

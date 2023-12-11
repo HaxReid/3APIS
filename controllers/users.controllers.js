@@ -6,10 +6,6 @@ dotenv.config();
 
 const getAllUsers = async (req, res) => {
     try{
-      if (req.user.role !== 'admin') {
-        return res.status(403).json({ message: 'Seulement un admin peut consulter la liste des utilisateurs ' });
-      }
-
       const users = await Users.find();
       res.json({ users });
     } catch (error) {
@@ -21,12 +17,6 @@ const getAllUsers = async (req, res) => {
   const getOneUser = async (req, res) => {
     try {
       const userId = req.params.userId; 
-      const currentUserId = req.user.userId;
-      const currentUserRole = req.user.role;
-
-      if (!isValidObjectId(userId)) {
-        return res.status(400).json({ message: 'ID de l\'utilisateur non valide.' });
-      }
 
       const user = await Users.findById(userId);
 
@@ -60,31 +50,16 @@ const createUser = async (req, res) => {
 
     const savedUser = await newUser.save();
 
-    const token = jwt.sign(
-      { userId: savedUser._id, email: savedUser.email, role: savedUser.role, pseudo: savedUser.pseudo },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    res.json({ token, user: { userId: savedUser._id, email: savedUser.email, role: savedUser.role, pseudo: savedUser.pseudo } });
+    res.json({ user: { userId: savedUser._id, email: savedUser.email, pseudo: savedUser.pseudo, role: savedUser.role } });
   } catch (error) {
     console.error('Erreur lors de la création de l\'utilisateur :', error);
     res.status(500).json({ message: 'Erreur lors de la création de l\'utilisateur.' });
   }
 };
 
-
-
-
 const updateUser = async (req, res) => {
   try {
     const userIdToUpdate = req.params.userId;
-    const currentUserId = req.user.userId;
-    const currentUserRole = req.user.role;
-
-    if (!(currentUserRole === 'admin' || currentUserId === userIdToUpdate)) {
-      return res.status(403).json({ message: 'Vous n\'avez pas la permission de mettre à jour cet utilisateur.' });
-    }
 
     const { email, pseudo, password, role } = req.body;
     const userToUpdate = await Users.findById(userIdToUpdate);
@@ -153,18 +128,11 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Identifiants invalides.' });
     }
 
-    const token = jwt.sign(
-      { userId: user._id, email: user.email, role: user.role, pseudo: user.pseudo },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    res.json({ token, user: { userId: user._id, email: user.email, role: user.role, pseudo: user.pseudo } });
+    res.json({ user: { userId: user._id, email: user.email, pseudo: user.pseudo, role: user.role } });
   } catch (error) {
     console.error('Erreur lors de la connexion :', error);
     res.status(500).json({ message: 'Erreur lors de la connexion.' });
   }
 };
-
 
   export { getAllUsers, getOneUser, createUser, updateUser, deleteUser, loginUser };

@@ -41,11 +41,6 @@ const getOneTrain = async (req, res) => {
   
 const createTrain = async (req, res) => {
   try {
-
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Seulement un admin peut create un train.' });
-    }
-
     const { name, start_station, end_station, time_of_departure } = req.body;
 
     const newTrain = new Trains({
@@ -66,10 +61,6 @@ const createTrain = async (req, res) => {
   
 const updateTrain = async (req, res) => {
   try {
-
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Seulement un admin peut update un train.' });
-    }
 
     const trainId = req.params.trainId;
 
@@ -97,10 +88,6 @@ const updateTrain = async (req, res) => {
   
 const deleteTrain = async (req, res) => {
   try {
-
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Seulement un admin peut delete un train.' });
-    }
 
     const trainId = req.params.trainId;
 

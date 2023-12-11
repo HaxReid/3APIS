@@ -9,10 +9,8 @@ const authenticate = (req, res, next) => {
     return res.status(401).json({ message: 'Accès non autorisé. Token manquant.' });
   }
 
-  console.log('token', token)
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      console.log(err)
+    if (err) {   
       return res.status(401).json({ error: 'Unauthorized' });
     }
     req.user = user;
