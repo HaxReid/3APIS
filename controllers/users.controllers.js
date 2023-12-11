@@ -128,7 +128,9 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Identifiants invalides.' });
     }
 
-    res.json({ user: { userId: user._id, email: user.email, pseudo: user.pseudo, role: user.role } });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+
+    res.json({ sucess: true, data: [{token: token, email: user.email}], message: 'Utilisateur connecté.' });
   } catch (error) {
     console.error('Erreur lors de la connexion :', error);
     res.status(500).json({ message: 'Erreur lors de la connexion.' });

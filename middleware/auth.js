@@ -1,50 +1,52 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import Users from '../models/Users.js';
 dotenv.config();
 
-const authenticate = (req, res, next) => {
-  const token = req.header('Authorization');
-
-  if (!token) {
-    return res.status(401).json({ message: 'Accès non autorisé. Token manquant.' });
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {   
-      return res.status(401).json({ error: 'Unauthorized' });
+const AdminAuthentification = async (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1];
+  if (token) {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await Users.findById(decodedToken.id);
+    if (user.role === 'admin') {
+      next();
+    } else {
+      res.status(403).json({ message: 'Vous n\'avez pas la permission d\'accéder à cette ressource.' });
     }
-    req.user = user;
-    next();
-  });
-};
-
-const authenticateRole = (req, res, next) => {
-  const token = req.header('Authorization');
-
-  if (!token) {
-    return res.status(401).json({ message: 'Accès non autorisé. Token manquant.' });
+  } else {
+    res.status(401).json({ message: 'Vous devez être connecté pour accéder à cette ressource.' });
   }
+}
 
-  const userRole = getRoleFromToken(token);
-
-  if (!userRole) {
-    return res.status(401).json({ error: 'Unauthorized' });
+const HimselfAuthentification = async (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1];
+  if (token) {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await Users.findById(decodedToken.id);
+    if (user._id.toString() === req.params.userId) {
+      next();
+    } else {
+      res.status(403).json({ message: 'Vous n\'avez pas la permission d\'accéder à cette ressource.' });
+    }
+  } else {
+    res.status(401).json({ message: 'Vous devez être connecté pour accéder à cette ressource.' });
   }
+}
 
-  req.userRole = userRole;
-
-  next();
-};
-
-
-const getRoleFromToken = (token) => {
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    return decoded.role;
-  } catch (error) {
-    console.error('Erreur lors de la récupération du rôle à partir du jeton :', error);
-    return null;
+const AdminOrHimselfAuthentification = async (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1];
+  if (token) {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await Users.findById(decodedToken.id);
+    if (user.role === 'admin' || user._id.toString() === req.params.userId) {
+      next();
+    } else {
+      res.status(403).json({ message: 'Vous n\'avez pas la permission d\'accéder à cette ressource.' });
+    }
+  } else {
+    res.status(401).json({ message: 'Vous devez être connecté pour accéder à cette ressource.' });
   }
-};
-export { authenticate, authenticateRole };
+}
+
+
+export { AdminAuthentification, HimselfAuthentification, AdminOrHimselfAuthentification }

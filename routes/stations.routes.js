@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllStations, getOneStation, createStation, updateStation, deleteStation } from '../controllers/stations.controllers.js';
-import {authenticateRole} from '../middleware/auth.js';
+import { AdminAuthentification, HimselfAuthentification, AdminOrHimselfAuthentification} from '../middleware/auth.js';
 
 const stationsRoutes = express.Router();
 
@@ -8,10 +8,10 @@ stationsRoutes.get('/', getAllStations);
 
 stationsRoutes.get('/:stationId', getOneStation);
 
-stationsRoutes.post('/', authenticateRole, createStation);
+stationsRoutes.post('/', AdminAuthentification, createStation);
 
-stationsRoutes.put('/:stationId', authenticateRole, updateStation);
+stationsRoutes.put('/:stationId', AdminAuthentification, updateStation);
 
-stationsRoutes.delete('/:stationId',  authenticateRole, deleteStation);
+stationsRoutes.delete('/:stationId', AdminAuthentification, deleteStation);
 
 export default stationsRoutes;

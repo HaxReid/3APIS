@@ -31,7 +31,6 @@ const getOneStation = async (req, res) => {
 const createStation = async (req, res) => {
   try {
 
-
     const { name, open_hour, close_hour, image } = req.body;
 
     const newStation = new Stations({

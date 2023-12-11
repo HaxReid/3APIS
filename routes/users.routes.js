@@ -1,10 +1,10 @@
 import express from 'express';
 import { getAllUsers, getOneUser, createUser, updateUser, deleteUser, loginUser } from '../controllers/users.controllers.js';
-import {authenticate, authenticateRole} from '../middleware/auth.js';
+import { AdminAuthentification, HimselfAuthentification, AdminOrHimselfAuthentification} from '../middleware/auth.js';
 
 const usersRoutes = express.Router();
 
-usersRoutes.get('/', getAllUsers);
+usersRoutes.get('/', AdminAuthentification, getAllUsers);
 
 usersRoutes.get('/:userId', getOneUser);
 
