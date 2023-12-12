@@ -16,7 +16,7 @@ Configuration du Projet
 - Ouvrez Docker Desktop sur votre machine.
 - Exécutez la commande suivante à la racine du projet pour lancer les conteneurs Docker :
   ```
-  docker-compose up
+  docker compose up -d
   ```
 - Cela lancera MongoDB et Swagger UI. Assurez-vous que les ports `27017` et `8080` ne sont pas déjà utilisés sur votre machine.
 
