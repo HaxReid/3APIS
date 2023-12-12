@@ -7,5 +7,15 @@ services:
     ports:
       - "27017:27017"
 
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: swagger-ui
+    ports:
+      - "8080:8080"
+    environment:
+      - SWAGGER_JSON=/app/swagger.yaml
+    volumes:
+      - ./swagger.yaml:/app/swagger.yaml
+
 volumes:
   mongodb_data:

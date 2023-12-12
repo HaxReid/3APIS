@@ -4,24 +4,24 @@ import Tickets from '../models/Tickets.js';
 const isTicketValid = async (ticketId) => {
     const ticketId = req.params.id;
     try {
-      const ticket = await Tickets.findById(ticketId);
-      if (!ticket) {
+    const ticket = await Tickets.findById(ticketId);
+    if (!ticket) {
         return res.status(401).json({message: "Ticket non trouvé"});
-      }
-      const train = await Trains.findById(ticket.trainId);
-      if (!train) {
-        return  res.status(401).json({message: "Train non trouvé"});
-      }
-      if (ticket.departureHour < train.time_of_departure) {
-        return res.status(401).json({message: "Ticket expiré"});
-      }
-      return res.status(201).json({message: "Ticket valide"});
-    } catch (error) {
-      return res.status(500).json({ message: 'Erreur lors de la vérification du ticket.' });
     }
-  };
+    const train = await Trains.findById(ticket.trainId);
+    if (!train) {
+        return  res.status(401).json({message: "Train non trouvé"});
+    }
+    if (ticket.departureHour < train.time_of_departure) {
+        return res.status(401).json({message: "Ticket expiré"});
+    }
+    return res.status(201).json({message: "Ticket valide"});
+    } catch (error) {
+    return res.status(500).json({ message: 'Erreur lors de la vérification du ticket.' });
+    }
+};
 
-  const createTicket = async (req, res) => {
+const createTicket = async (req, res) => {
     const ticket = req.body;
     try {
         const result = await Tickets.create(ticket);
@@ -29,6 +29,6 @@ const isTicketValid = async (ticketId) => {
     } catch (error) {
         res.status(500).json({ message: 'Erreur lors de la création du ticket.' });
     }
-  };
+};
 
 export { isTicketValid, createTicket };

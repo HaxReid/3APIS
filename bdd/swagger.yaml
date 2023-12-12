@@ -1,0 +1,401 @@
+openapi: 3.0.0
+info:
+  title: Railroad
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+    description: Local server
+tags:
+  - name: users
+    description: Users
+  - name: trains
+    description: Trains
+  - name: stations
+    description: Train stations
+  - name: tickets
+    description: Trains Tickets
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: Liste des utilisateurs
+      description: Retourne une liste d'utilisateurs.
+      responses:
+        '200':
+          description: Succès
+    post:
+      tags:
+        - users
+      summary: Créer un utilisateur
+      description: Crée un nouvel utilisateur.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                pseudo:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+      responses:
+        '201':
+          description: Créé avec succès
+
+  /users/{userId}:
+    get:
+      tags:
+        - users
+      summary: Récupérer un utilisateur par ID
+      description: Récupère les informations d'un utilisateur en fonction de son ID.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID de l'utilisateur
+      responses:
+        '200':
+          description: Succès
+        '404':
+          description: Utilisateur non trouvé
+
+    put:
+      tags:
+        - users
+      summary: Mettre à jour un utilisateur par ID
+      description: Met à jour les informations d'un utilisateur en fonction de son ID.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID de l'utilisateur
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                pseudo:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+      responses:
+        '200':
+          description: Mise à jour réussie
+        '404':
+          description: Utilisateur non trouvé
+
+    delete:
+      tags:
+        - users
+      summary: Supprimer un utilisateur par ID
+      description: Supprime un utilisateur en fonction de son ID.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID de l'utilisateur
+      responses:
+        '200':
+          description: Utilisateur supprimé
+        '404':
+          description: Utilisateur non trouvé
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Connexion d'un utilisateur
+      description: Connecte un utilisateur et renvoie un token JWT.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Connexion réussie
+        '401':
+          description: Identifiants invalides
+        '500':
+          description: Erreur lors de la connexion
+
+  /stations:
+    get:
+      tags:
+        - stations
+      summary: Liste des stations
+      description: Retourne une liste de stations.
+      responses:
+        '200':
+          description: Succès
+    post:
+      tags:
+        - stations
+      summary: Créer une station
+      description: Crée une nouvelle station.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                open_hour:
+                  type: string
+                close_hour:
+                  type: string
+                image:
+                  type: string
+      responses:
+        '201':
+          description: Créé avec succès
+
+  /stations/{stationId}:
+    get:
+      tags:
+        - stations
+      summary: Récupérer une station par ID
+      description: Récupère les informations d'une station en fonction de son ID.
+      parameters:
+        - in: path
+          name: stationId
+          required: true
+          schema:
+            type: string
+          description: ID de la station
+      responses:
+        '200':
+          description: Succès
+        '404':
+          description: Station non trouvée
+
+    put:
+      tags:
+        - stations
+      summary: Mettre à jour une station par ID
+      description: Met à jour les informations d'une station en fonction de son ID.
+      parameters:
+        - in: path
+          name: stationId
+          required: true
+          schema:
+            type: string
+          description: ID de la station
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                open_hour:
+                  type: string
+                close_hour:
+                  type: string
+                image:
+                  type: string
+      responses:
+        '200':
+          description: Mise à jour réussie
+        '404':
+          description: Station non trouvée
+
+    delete:
+      tags:
+        - stations
+      summary: Supprimer une station par ID
+      description: Supprime une station en fonction de son ID.
+      parameters:
+        - in: path
+          name: stationId
+          required: true
+          schema:
+            type: string
+          description: ID de la station
+      responses:
+        '200':
+          description: Station supprimée
+        '404':
+          description: Station non trouvée
+
+  /trains:
+    get:
+      tags:
+        - trains
+      summary: Liste des trains
+      description: Retourne une liste de trains.
+      parameters:
+        - in: query
+          name: sort
+          schema:
+            type: string
+          description: Champs de tri (séparés par des virgules)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Limite du nombre de résultats
+      responses:
+        '200':
+          description: Succès
+    post:
+      tags:
+        - trains
+      summary: Créer un train
+      description: Crée un nouveau train.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                start_station:
+                  type: string
+                end_station:
+                  type: string
+                time_of_departure:
+                  type: string
+      responses:
+        '201':
+          description: Créé avec succès
+
+  /trains/{trainId}:
+    get:
+      tags:
+        - trains
+      summary: Récupérer un train par ID
+      description: Récupère les informations d'un train en fonction de son ID.
+      parameters:
+        - in: path
+          name: trainId
+          required: true
+          schema:
+            type: string
+          description: ID du train
+      responses:
+        '200':
+          description: Succès
+        '404':
+          description: Train non trouvé
+
+    put:
+      tags:
+        - trains
+      summary: Mettre à jour un train par ID
+      description: Met à jour les informations d'un train en fonction de son ID.
+      parameters:
+        - in: path
+          name: trainId
+          required: true
+          schema:
+            type: string
+          description: ID du train
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                start_station:
+                  type: string
+                end_station:
+                  type: string
+                time_of_departure:
+                  type: string
+      responses:
+        '200':
+          description: Mise à jour réussie
+        '404':
+          description: Train non trouvé
+
+    delete:
+      tags:
+        - trains
+      summary: Supprimer un train par ID
+      description: Supprime un train en fonction de son ID.
+      parameters:
+        - in: path
+          name: trainId
+          required: true
+          schema:
+            type: string
+          description: ID du train
+      responses:
+        '200':
+          description: Train supprimé
+        '404':
+          description: Train non trouvé
+
+  /tickets:
+    post:
+      tags:
+        - tickets
+      summary: Créer un ticket
+      description: Crée un nouveau ticket.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                trainId:
+                  type: string
+                departureHour:
+                  type: string
+                arrivalHour:
+                  type: string
+                statut:
+                  type: string
+      responses:
+        '201':
+          description: Ticket créé avec succès
+
+  /tickets/{id}:
+    post:
+      tags:
+        - tickets
+      summary: Vérifier la validité d'un ticket
+      description: Vérifie si un ticket est valide.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID du ticket
+      responses:
+        '201':
+          description: Ticket valide
+        '401':
+          description: Ticket non valide
+        '500':
+          description: Erreur lors de la vérification du ticket
