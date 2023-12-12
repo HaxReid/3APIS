@@ -130,7 +130,7 @@ const loginUser = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
-    res.json({ sucess: true, data: [{token: token, email: user.email}], message: 'Utilisateur connecté.' });
+    res.json({ data: [{token: token, email: user.email}], message: 'Utilisateur connecté.' });
   } catch (error) {
     console.error('Erreur lors de la connexion :', error);
     res.status(500).json({ message: 'Erreur lors de la connexion.' });

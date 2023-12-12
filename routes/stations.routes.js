@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllStations, getOneStation, createStation, updateStation, deleteStation } from '../controllers/stations.controllers.js';
-import { AdminAuthentification, HimselfAuthentification, AdminOrHimselfAuthentification} from '../middleware/auth.js';
+import { AdminAuthentification} from '../middleware/auth.js';
 
 const stationsRoutes = express.Router();
 

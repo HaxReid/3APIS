@@ -14,7 +14,7 @@ const getAllTrains = async (req, res) => {
 
     const trains = await query.exec();
 
-    res.json(trains);
+    res.status(201).json(trains);
   } catch (error) {
     console.error('Error fetching trains:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -32,7 +32,7 @@ const getOneTrain = async (req, res) => {
       return res.status(404).json({ message: 'Train non trouvé.' });
     }
 
-    res.json(train);
+    res.status(201).json(train);
   } catch (error) {
     console.error('Erreur lors de la récupération du train par ID:', error);
     res.status(500).json({ message: 'Erreur serveur lors de la récupération du train par ID.' });
@@ -40,68 +40,44 @@ const getOneTrain = async (req, res) => {
 };
   
 const createTrain = async (req, res) => {
+  const train = req.body;
+  const start_station = req.body.start_station;
+  const end_station = req.body.end_station;
+  if (!start_station || !end_station) {
+      res.status(400).json({message: "start_station et end_station sont obligatoires"});
+  }
+  if (!train.time_of_departure) {
+    train.time_of_departure = new Date();
+  }
   try {
-    const { name, start_station, end_station, time_of_departure } = req.body;
-
-    const newTrain = new Trains({
-      name,
-      start_station,
-      end_station,
-      time_of_departure,
-    });
-
-    const savedTrain = await newTrain.save();
-
-    res.status(201).json(savedTrain);
-  } catch (error) {
-    console.error('Erreur lors de la création du train :', error);
-    res.status(500).json({ message: 'Erreur lors de la création du train.' });
+    const trainStation = await Trains.create(train);
+    res.status(201).json(trainStation);
+  } catch (err) {
+      res.status(500).json(err);
   }
 };
   
 const updateTrain = async (req, res) => {
+  const trainId = req.params.id;
+  const train = req.body;
   try {
-
-    const trainId = req.params.trainId;
-
-    const { name, start_station, end_station, time_of_departure } = req.body;
-
-    const trainToUpdate = await Trains.findById(trainId);
-
-    if (!trainToUpdate) {
-      return res.status(404).json({ message: 'Train non trouvée.' });
-    }
-
-    trainToUpdate.name = name;
-    trainToUpdate.start_station = start_station;
-    trainToUpdate.end_station = end_station;
-    trainToUpdate.time_of_departure = time_of_departure;
-
-    const updatedTrain = await trainToUpdate.save();
-
-    res.json(updatedTrain);
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour du train :', error);
-    res.status(500).json({ message: 'Erreur lors de la mise à jour du train.' });
+      const result = await Trains.findByIdAndUpdate(trainId, train, {new: true});
+      if (!result) {
+          res.status(404).json({message: "Train non trouvé"});
+      } else {
+          res.status(201).json(result);
+      }
+  } catch (err) {
+      res.status(500).json(err);
   }
 };
   
 const deleteTrain = async (req, res) => {
+  const trainId = req.params.trainId;
   try {
-
-    const trainId = req.params.trainId;
-
-    const trainToDelete = await Trains.findById(trainId);
-
-    if (!trainToDelete) {
-      return res.status(404).json({ message: 'Train non trouvée.' });
-    }
-
-    await trainToDelete.remove();
-
-    res.json({ message: 'Train supprimé avec succès.' });
+    const result = await Trains.findByIdAndDelete(trainId);
+    res.status(201).json(result);
   } catch (error) {
-    console.error('Erreur lors de la suppression du train :', error);
     res.status(500).json({ message: 'Erreur lors de la suppression du train.' });
   }
 };
