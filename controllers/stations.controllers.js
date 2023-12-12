@@ -1,7 +1,7 @@
 import Stations from '../models/Stations.js';
 import Trains from '../models/Trains.js';
 import Tickets from '../models/Tickets.js';
-import { JoiStationSchema } from '../joi/JoiStationSchema.js';
+import JoiStationSchema from '../joi/JoiStationSchema.js';
 
 const getAllStations = async (req, res) => {
   try {      

@@ -2,8 +2,8 @@ import Users from '../models/Users.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { JoiLoggingSchema } from '../joi/JoiLoggingSchema.js';
-import { JoiUserSchema } from '../joi/JoiUserSchema.js';
+import JoiLoggingSchema from '../joi/JoiLoggingSchema.js';
+import JoiUserSchema from '../joi/JoiUserSchema.js';
 dotenv.config();
 
 const getAllUsers = async (req, res) => {

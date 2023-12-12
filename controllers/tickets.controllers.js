@@ -1,5 +1,6 @@
 import Trains from '../models/Trains.js';
 import Tickets from '../models/Tickets.js';
+import JoiTicketSchema from '../joi/JoiTicketSchema.js';
 
 const isTicketValid = async (req, res) => {
     const ticketId = req.params.id;
@@ -25,7 +26,8 @@ const isTicketValid = async (req, res) => {
   };
 
   const createTicket = async (req, res) => {
-    const ticket = req.body;
+    const validatedData = JoiTicketSchema.validate(req.body, { abortEarly: false });
+    const ticket = validatedData.value;
     try {
         const result = await Tickets.create(ticket);
         return res.status(200).json({message: "ticket créé"}, result);

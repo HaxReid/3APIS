@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { Stations } from "../models/Stations";
+import Stations from "../models/Stations.js";
 
 const existingStation = async (value, helpers) => {
     const station = await Stations.findOne({name: value});
