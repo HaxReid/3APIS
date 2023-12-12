@@ -38,6 +38,28 @@ paths:
                       $ref: '#/components/schemas/User'
         '204':
           description: No content
+    post:
+      tags:
+        - users
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
   /users/{id}:
     get:
       tags:
@@ -68,28 +90,6 @@ paths:
           description: No content
       security:
         - bearerAuth: []
-    post:
-      tags:
-        - users
-      summary: Create a new user
-      operationId: createUser
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Bad request
-        '500':
-          description: Internal server error
     put:
       tags:
         - users
@@ -205,6 +205,28 @@ paths:
                   $ref: '#/components/schemas/Train'
         '204':
           description: No content
+    post:
+      tags:
+        - trains
+      summary: Create a new train
+      operationId: createTrain
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Train'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Train'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
   /trains/{id}:
     get:
       tags:
@@ -229,28 +251,6 @@ paths:
           description: No content
       security:
         - bearerAuth: []
-    post:
-      tags:
-        - trains
-      summary: Create a new train
-      operationId: createTrain
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Train'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Train'
-        '400':
-          description: Bad request
-        '500':
-          description: Internal server error
     put:
       tags:
         - trains
@@ -380,6 +380,26 @@ paths:
                       $ref: '#/components/schemas/Station'
         '204':
           description: No Content
+    post:
+      tags:
+        - stations
+      summary: Create a new station
+      operationId: createStation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Station'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Station'
+        '500':
+          description: Internal server error
   /stations/{id}:
     get:
       tags:
@@ -402,26 +422,6 @@ paths:
                 $ref: '#/components/schemas/Station'
         '204':
           description: No Content
-    post:
-      tags:
-        - stations
-      summary: Create a new station
-      operationId: createStation
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Station'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Station'
-        '500':
-          description: Internal server error
     put:
       tags:
         - stations
