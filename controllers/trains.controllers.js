@@ -1,5 +1,6 @@
 import Trains from '../models/Trains.js';
 import Ticket from '../models/Tickets.js';
+import { JoiTrainSchema } from '../joi/JoiTrainSchema.js';
 
 const getAllTrains = async (req, res) => {
   try {
@@ -35,7 +36,8 @@ const getOneTrain = async (req, res) => {
 };
   
 const createTrain = async (req, res) => {
-  const train = req.body;
+  const validatedData = JoiTrainSchema.validate(req.body, { abortEarly: false });
+  const train = validatedData.value;
   const start_station = req.body.start_station;
   const end_station = req.body.end_station;
   if (!start_station || !end_station) {
@@ -74,7 +76,7 @@ const deleteTrain = async (req, res) => {
 
     await Ticket.updateMany(
       { _id: { $in: ticketIds } },
-      { $set: { statut: 'canceled' } }
+      { $set: { statut: 'invalid' } }
     );
 
     const result = await Trains.findByIdAndDelete(trainId);

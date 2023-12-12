@@ -2,6 +2,8 @@ import Users from '../models/Users.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { JoiLoggingSchema } from '../joi/JoiLoggingSchema.js';
+import { JoiUserSchema } from '../joi/JoiUserSchema.js';
 dotenv.config();
 
 const getAllUsers = async (req, res) => {
@@ -31,7 +33,8 @@ const getOneUser = async (req, res) => {
 };
   
 const createUser = async (req, res) => {
-  const user = req.body;
+  const validatedData = JoiUserSchema.validate(req.body, { abortEarly: false });
+  const user = validatedData.value;
   if(user.password) {
     user.password = await bcrypt.hash(user.password, 10);
     try {
@@ -76,8 +79,9 @@ const deleteUser = async (req, res) => {
 };
   
 const loginUser = async (req, res) => {
+  const validatedData = JoiLoggingSchema.validate(req.body, { abortEarly: false });
+  const { email, password } = validatedData.value;
   try {
-    const { email, password } = req.body;
     const user = await Users.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: 'Identifiants invalides.' });

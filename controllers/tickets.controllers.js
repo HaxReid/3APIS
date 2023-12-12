@@ -15,6 +15,9 @@ const isTicketValid = async (req, res) => {
       if (ticket.departureHour > train.time_of_departure) {
         return res.status(401).json({message: "Ticket expiré"});
       }
+      if (ticket.statut === "invalid") {
+        return res.status(401).json({message: "Ticket invalide"});
+      }
       return res.status(201).json({message: "Ticket valide"});
     } catch (error) {
       return res.status(500).json({ message: 'Erreur lors de la vérification du ticket.' });

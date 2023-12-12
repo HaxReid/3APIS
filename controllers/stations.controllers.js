@@ -1,6 +1,7 @@
 import Stations from '../models/Stations.js';
 import Trains from '../models/Trains.js';
 import Tickets from '../models/Tickets.js';
+import { JoiStationSchema } from '../joi/JoiStationSchema.js';
 
 const getAllStations = async (req, res) => {
   try {      
@@ -31,7 +32,8 @@ const getOneStation = async (req, res) => {
 };
 
 const createStation = async (req, res) => {
-  const station = req.body;
+  const validatedData = JoiStationSchema.validate(req.body, { abortEarly: false });
+  const station = validatedData.value;
   if (!station.open_hour || !station.close_hour) {
       station.open_hour = new Date();
       station.close_hour = new Date();
