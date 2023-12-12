@@ -1,0 +1,566 @@
+openapi: 3.0.0
+info:
+  title: Railroad
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+    description: Local server
+tags:
+  - name: users
+    description: Users
+  - name: trains
+    description: Trains
+  - name: stations
+    description: Train stations
+  - name: tickets
+    description: Trains Tickets
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all users
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Utilisateurs trouvés
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        '204':
+          description: No content
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: Get one user by ID
+      operationId: getOneUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to get
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Utilisateur trouvé
+                  user:
+                    $ref: '#/components/schemas/User'
+        '204':
+          description: No content
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - users
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - users
+      summary: Update user by ID
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - users
+      summary: Delete user by ID
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: User login
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        token:
+                          type: string
+                          example: 'jwt-token-here'
+                        _id:
+                          type: string
+                          example: 'user-id-here'
+                  message:
+                    type: string
+                    example: Utilisateur connecté
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+  /trains:
+    get:
+      tags:
+        - trains
+      summary: Get all trains
+      operationId: getAllTrains
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Train'
+        '204':
+          description: No content
+  /trains/{id}:
+    get:
+      tags:
+        - trains
+      summary: Get one train by ID
+      operationId: getOneTrain
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the train to get
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Train'
+        '204':
+          description: No content
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - trains
+      summary: Create a new train
+      operationId: createTrain
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Train'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Train'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - trains
+      summary: Update train by ID
+      operationId: updateTrain
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the train to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Train'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Train'
+        '204':
+          description: No content
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - trains
+      summary: Delete train by ID
+      operationId: deleteTrain
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the train to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+        '204':
+          description: No content
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+  /tickets:
+    post:
+      tags:
+        - tickets
+      summary: Create a new ticket
+      operationId: createTicket
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+        '500':
+          description: Internal server error
+  /tickets/{id}:
+    post:
+      tags:
+        - tickets
+      summary: Check if a ticket is valid
+      operationId: isTicketValid
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the ticket to check
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error
+      security:
+        - bearerAuth: []
+  /stations:
+    get:
+      tags:
+        - stations
+      summary: Get all stations
+      operationId: getAllStations
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Station'
+        '204':
+          description: No Content
+  /stations/{id}:
+    get:
+      tags:
+        - stations
+      summary: Get a station by ID
+      operationId: getOneStation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the station to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Station'
+        '204':
+          description: No Content
+    post:
+      tags:
+        - stations
+      summary: Create a new station
+      operationId: createStation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Station'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Station'
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - stations
+      summary: Update a station by ID
+      operationId: updateStation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the station to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Station'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Station'
+        '204':
+          description: No Content
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - stations
+      summary: Delete a station by ID
+      operationId: deleteStation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the station to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Station'
+        '204':
+          description: No Content
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+          format: email
+        pseudo:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+      required:
+        - email
+        - pseudo
+        - password
+        - role
+
+    Train:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        start_station:
+          type: string
+        end_station:
+          type: string
+        time_of_departure:
+          type: string
+          format: date-time
+      required:
+        - name
+        - start_station
+        - end_station
+
+    Ticket:
+      type: object
+      properties:
+        userId:
+          type: string
+        trainId:
+          type: string
+        departureHour:
+          type: string
+          format: date-time
+        arrivalHour:
+          type: string
+          format: date-time
+        statut:
+          type: string
+      required:
+        - userId
+        - trainId
+        - departureHour
+        - arrivalHour
+
+    Station:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nom de la station
+        open_hour:
+          type: string
+          format: date-time
+          description: Heure d'ouverture de la station
+        close_hour:
+          type: string
+          format: date-time
+          description: Heure de fermeture de la station
+        image:
+          type: string
+          description: URL ou chemin de l'image de la station
+      required:
+        - name
+        - open_hour
+        - close_hour
+        - image
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

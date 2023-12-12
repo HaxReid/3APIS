@@ -10,9 +10,9 @@ const getAllUsers = async (req, res) => {
     try{
       const users = await Users.find();
       if (!users) {
-        return res.status(404).json({ message: 'Utilisateurs non trouvés.' });
+        return res.status(204).json({ message: 'Utilisateurs non trouvés.' });
       }
-      res.status(201).json({message: "Utilisateurs trouvés"}, { users });
+      res.status(200).json({message: "Utilisateurs trouvés"}, { users });
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs.' });
     }
@@ -23,9 +23,9 @@ const getOneUser = async (req, res) => {
   try {
       const user = await Users.findById(userId);
       if (user) {
-          res.status(201).json({message: "Utilisateur trouvé"}, { user });
+          res.status(200).json({message: "Utilisateur trouvé"}, { user });
       } else {
-          res.status(404).json("Utilisateur non trouvé");
+          res.status(204).json("Utilisateur non trouvé");
       }
   } catch (err) {
       res.status(500).json({ message: 'Erreur lors de la récupération de l\'utilisateurs' });
@@ -39,7 +39,7 @@ const createUser = async (req, res) => {
     user.password = await bcrypt.hash(user.password, 10);
     try {
       const result = await Users.create(user);
-      res.status(201).json(result);
+      res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de la création de l\'utilisateur.' });
     }
@@ -59,7 +59,7 @@ const updateUser = async (req, res) => {
     user.password = await bcrypt.hash(user.password, 10);
     try {
       const result = await Users.findByIdAndUpdate(userId, user);
-      res.status(201).json(result);
+      res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de la création de l\'utilisateur.' });
     }
@@ -72,7 +72,7 @@ const deleteUser = async (req, res) => {
   const userId = req.params.id;
   try {
     const result = await Users.findByIdAndDelete(userId);
-    res.status(201).json(result);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la suppression de l\'utilisateur.' });
   }
@@ -91,7 +91,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Identifiants invalides.' });
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-    res.status(201).json({ data: [{token: token, _id: user._id}], message: 'Utilisateur connecté.' });
+    res.status(200).json({ data: [{token: token, _id: user._id}], message: 'Utilisateur connecté.' });
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la connexion.' });
   }

@@ -6,7 +6,7 @@ const getAllTrains = async (req, res) => {
   try {
     let query = Trains.find();
     if (!query) {
-      return res.status(404).json({ message: 'Trains non trouvés.' });
+      return res.status(204).json({ message: 'Trains non trouvés.' });
     }
     if (req.query.sort) {
       const sortFields = req.query.sort.split(',');
@@ -15,7 +15,7 @@ const getAllTrains = async (req, res) => {
     const limit = req.query.limit ? parseInt(req.query.limit) : 10;
     query = query.limit(limit);
     const trains = await query.exec();
-    res.status(201).json(trains);
+    res.status(200).json(trains);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
@@ -27,9 +27,9 @@ const getOneTrain = async (req, res) => {
   try {
     const train = await Trains.findById(trainId);
     if (!train) {
-      return res.status(404).json({ message: 'Train non trouvé.' });
+      return res.status(204).json({ message: 'Train non trouvé.' });
     }
-    res.status(201).json(train);
+    res.status(200).json(train);
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur lors de la récupération du train par ID.' });
   }
@@ -48,7 +48,7 @@ const createTrain = async (req, res) => {
   }
   try {
     const result = await Trains.create(train);
-    res.status(201).json({message: "Train créé"}, result);
+    res.status(200).json({message: "Train créé"}, result);
   } catch (err) {
       res.status(500).json(err);
   }
@@ -60,9 +60,9 @@ const updateTrain = async (req, res) => {
   try {
       const result = await Trains.findByIdAndUpdate(trainId, train, {new: true});
       if (!result) {
-          res.status(404).json({message: "Train non trouvé"});
+          res.status(204).json({message: "Train non trouvé"});
       } else {
-          res.status(201).json({message: "Train modifié"}, result);
+          res.status(200).json({message: "Train modifié"}, result);
       }
   } catch (err) {
       res.status(500).json(err);
@@ -82,7 +82,7 @@ const deleteTrain = async (req, res) => {
     const result = await Trains.findByIdAndDelete(trainId);
 
     if (!result) {
-      return res.status(404).json({ message: "Train non trouvé" });
+      return res.status(204).json({ message: "Train non trouvé" });
     }
 
     res.status(200).json({ message: "Train supprimé et tickets annulés", result });
@@ -90,7 +90,6 @@ const deleteTrain = async (req, res) => {
     res.status(500).json({ message: 'Erreur lors de la suppression du train et de l\'annulation des tickets.' });
   }
 };
-
 
   export { getAllTrains, getOneTrain, createTrain, updateTrain, deleteTrain};
   

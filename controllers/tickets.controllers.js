@@ -18,7 +18,7 @@ const isTicketValid = async (req, res) => {
       if (ticket.statut === "invalid") {
         return res.status(401).json({message: "Ticket invalide"});
       }
-      return res.status(201).json({message: "Ticket valide"});
+      return res.status(200).json({message: "Ticket valide"});
     } catch (error) {
       return res.status(500).json({ message: 'Erreur lors de la vérification du ticket.' });
     }
@@ -28,7 +28,7 @@ const isTicketValid = async (req, res) => {
     const ticket = req.body;
     try {
         const result = await Tickets.create(ticket);
-        return res.status(201).json({message: "ticket créé"}, result);
+        return res.status(200).json({message: "ticket créé"}, result);
     } catch (error) {
         return res.status(500).json({ message: 'Erreur lors de la création du ticket.' });
     }

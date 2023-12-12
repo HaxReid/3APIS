@@ -1,0 +1,20 @@
+services:
+  railroad-db:
+    image: mongo:7.0.4-jammy
+    environment:
+      MONGO_INITDB_DATABASE: RailRoad
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - 27017:27017
+  railroad-swagger:
+    image: swaggerapi/swagger-ui
+    environment:
+      - SWAGGER_JSON=/app/swagger/swagger.yaml
+    volumes:
+      - ./railroad.yaml:/app/swagger/swagger.yaml
+    ports:
+      - 8080:8080
+
+volumes:
+  mongodb_data:
