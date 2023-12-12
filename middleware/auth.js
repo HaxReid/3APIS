@@ -9,6 +9,7 @@ const AdminAuthentification = async (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const user = await Users.findById(decodedToken.id);
     if (user.role === 'admin') {
+      req.user = user;
       next();
     } else {
       res.status(403).json({ message: 'Vous n\'avez pas la permission d\'accéder à cette ressource.' });
@@ -23,7 +24,8 @@ const HimselfAuthentification = async (req, res, next) => {
   if (token) {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const user = await Users.findById(decodedToken.id);
-    if (user._id.toString() === req.params.userId) {
+    if ((user && user._id.toString() === req.params.id)) {
+      req.user = user;
       next();
     } else {
       res.status(403).json({ message: 'Vous n\'avez pas la permission d\'accéder à cette ressource.' });
@@ -38,7 +40,8 @@ const AdminOrHimselfAuthentification = async (req, res, next) => {
   if (token) {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const user = await Users.findById(decodedToken.id);
-    if (user.role === 'admin' || user._id.toString() === req.params.userId) {
+    if ((user && user._id.toString() === req.params.id) || user.role === 'admin') {
+      req.user = user;
       next();
     } else {
       res.status(403).json({ message: 'Vous n\'avez pas la permission d\'accéder à cette ressource.' });

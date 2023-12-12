@@ -6,13 +6,13 @@ const usersRoutes = express.Router();
 
 usersRoutes.get('/', AdminAuthentification, getAllUsers);
 
-usersRoutes.get('/:userId', AdminOrHimselfAuthentification, getOneUser);
+usersRoutes.get('/:id', AdminOrHimselfAuthentification, getOneUser);
 
 usersRoutes.post('/', createUser);
 
-usersRoutes.put('/:userId', AdminOrHimselfAuthentification, updateUser);
+usersRoutes.put('/:id', AdminOrHimselfAuthentification, updateUser);
 
-usersRoutes.delete('/:userId', HimselfAuthentification, deleteUser);
+usersRoutes.delete('/:id', HimselfAuthentification, deleteUser);
 
 usersRoutes.post('/login', loginUser);
 

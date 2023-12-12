@@ -6,12 +6,12 @@ const stationsRoutes = express.Router();
 
 stationsRoutes.get('/', getAllStations);
 
-stationsRoutes.get('/:stationId', getOneStation);
+stationsRoutes.get('/:id', getOneStation);
 
 stationsRoutes.post('/', AdminAuthentification, createStation);
 
-stationsRoutes.put('/:stationId', AdminAuthentification, updateStation);
+stationsRoutes.put('/:id', AdminAuthentification, updateStation);
 
-stationsRoutes.delete('/:stationId', AdminAuthentification, deleteStation);
+stationsRoutes.delete('/:id', AdminAuthentification, deleteStation);
 
 export default stationsRoutes;

@@ -1,5 +1,0 @@
-name,start_station,end_station,time_of_departure
-Train A,Station1,Station2,2023-12-01T10:00:00Z
-Train B,Station2,Station3,2023-12-02T12:30:00Z
-Train C,Station3,Station1,2023-12-03T15:45:00Z
-

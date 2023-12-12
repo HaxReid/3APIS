@@ -6,12 +6,12 @@ const trainsRoutes = express.Router();
 
 trainsRoutes.get('/', getAllTrains);
 
-trainsRoutes.get('/:trainId', getOneTrain);
+trainsRoutes.get('/:id', getOneTrain);
 
 trainsRoutes.post('/', AdminAuthentification, createTrain);
 
-trainsRoutes.put('/:trainId', AdminAuthentification, updateTrain);
+trainsRoutes.put('/:id', AdminAuthentification, updateTrain);
 
-trainsRoutes.delete('/:trainId', AdminAuthentification, deleteTrain);
+trainsRoutes.delete('/:id', AdminAuthentification, deleteTrain);
 
 export default trainsRoutes;
