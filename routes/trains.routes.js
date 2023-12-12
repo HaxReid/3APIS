@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllTrains, getOneTrain, createTrain, updateTrain, deleteTrain, createTicket } from '../controllers/trains.controllers.js';
+import { getAllTrains, getOneTrain, createTrain, updateTrain, deleteTrain } from '../controllers/trains.controllers.js';
 import { AdminAuthentification, AdminOrHimselfAuthentification } from '../middleware/auth.js';
 
 const trainsRoutes = express.Router();

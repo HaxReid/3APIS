@@ -1,6 +1,6 @@
 import Stations from '../models/Stations.js';
 import Trains from '../models/Trains.js';
-
+import Tickets from '../models/Tickets.js';
 
 const getAllStations = async (req, res) => {
   try {      
@@ -63,12 +63,21 @@ const updateStation = async (req, res) => {
 const deleteStation = async (req, res) => {
   const stationId = req.params.id;
   try {
+      const trainIds = await Trains.find({
+        $or: [
+          { start_station: stationId },
+          { end_station: stationId }
+        ]
+      }).distinct('_id');
+
       await Trains.deleteMany({
           $or: [
               {start_station: stationId},
               {end_station: stationId}
           ]
       });
+
+      await Tickets.deleteMany({ trainId: { $in: trainIds } });
       const result = await Stations.findByIdAndDelete(stationId);
       if (result) {
           res.status(200).json({message: "Station supprimée"}, result);

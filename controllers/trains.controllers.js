@@ -1,4 +1,5 @@
 import Trains from '../models/Trains.js';
+import Ticket from '../models/Tickets.js';
 
 const getAllTrains = async (req, res) => {
   try {
@@ -69,12 +70,25 @@ const updateTrain = async (req, res) => {
 const deleteTrain = async (req, res) => {
   const trainId = req.params.id;
   try {
+    const ticketIds = await Ticket.find({ trainId }).distinct('_id');
+
+    await Ticket.updateMany(
+      { _id: { $in: ticketIds } },
+      { $set: { statut: 'canceled' } }
+    );
+
     const result = await Trains.findByIdAndDelete(trainId);
-    res.status(201).json({message: "Train supprimé"}, result);
+
+    if (!result) {
+      return res.status(404).json({ message: "Train non trouvé" });
+    }
+
+    res.status(200).json({ message: "Train supprimé et tickets annulés", result });
   } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de la suppression du train.' });
+    res.status(500).json({ message: 'Erreur lors de la suppression du train et de l\'annulation des tickets.' });
   }
 };
+
 
   export { getAllTrains, getOneTrain, createTrain, updateTrain, deleteTrain};
   

@@ -1,7 +1,7 @@
 import Trains from '../models/Trains.js';
 import Tickets from '../models/Tickets.js';
 
-const isTicketValid = async (ticketId) => {
+const isTicketValid = async (req, res) => {
     const ticketId = req.params.id;
     try {
       const ticket = await Tickets.findById(ticketId);
@@ -12,7 +12,7 @@ const isTicketValid = async (ticketId) => {
       if (!train) {
         return  res.status(401).json({message: "Train non trouvé"});
       }
-      if (ticket.departureHour < train.time_of_departure) {
+      if (ticket.departureHour > train.time_of_departure) {
         return res.status(401).json({message: "Ticket expiré"});
       }
       return res.status(201).json({message: "Ticket valide"});
@@ -25,9 +25,9 @@ const isTicketValid = async (ticketId) => {
     const ticket = req.body;
     try {
         const result = await Tickets.create(ticket);
-        res.status(201).json({message: "ticket créé"}, result);
+        return res.status(201).json({message: "ticket créé"}, result);
     } catch (error) {
-        res.status(500).json({ message: 'Erreur lors de la création du ticket.' });
+        return res.status(500).json({ message: 'Erreur lors de la création du ticket.' });
     }
   };
 

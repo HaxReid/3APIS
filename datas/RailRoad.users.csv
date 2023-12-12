@@ -1,0 +1,3 @@
+_id,email,pseudo,password,role,__v
+656de7b8cb35c93fe781639a,admin@example.com,admin,$2b$10$GBEwwuBIT6BgoWTFrUsZleZV6pqmsIdZ8ACEtv3XnXQb1aGKFnluK,admin,0
+6576da7aa27927f00108b622,user@example.com,user,$2b$10$tYG4WfSmdn5k963Q4Xki2ev48LY0brIT1xYQBBUzwqIGYF5qcu4Dq,user,0

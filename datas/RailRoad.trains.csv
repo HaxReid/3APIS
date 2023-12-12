@@ -1,0 +1,5 @@
+_id,name,start_station,end_station,time_of_departure
+657836378d865b948c531935,Train A,Station A,Station B,2023-01-01T08:30:00.000Z
+657836378d865b948c531936,Train B,Station B,Station C,2023-01-01T10:00:00.000Z
+657836378d865b948c531937,Train C,Station C,Station D,2023-01-01T11:30:00.000Z
+657836378d865b948c531938,Train D,Station D,Station A,2023-01-01T13:00:00.000Z
