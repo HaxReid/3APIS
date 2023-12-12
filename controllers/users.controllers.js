@@ -1,4 +1,5 @@
 import Users from '../models/Users.js';
+import Tickets from '../models/Tickets.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -93,4 +94,4 @@ const loginUser = async (req, res) => {
   }
 };
 
-  export { getAllUsers, getOneUser, createUser, updateUser, deleteUser, loginUser };
+ export { getAllUsers, getOneUser, createUser, updateUser, deleteUser, loginUser };
