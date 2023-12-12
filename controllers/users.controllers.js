@@ -1,5 +1,4 @@
 import Users from '../models/Users.js';
-import Tickets from '../models/Tickets.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
