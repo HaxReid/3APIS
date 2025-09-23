@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accueil</title>
+  </head>
+  <body>
+    <h1>Form</h1>
+
+    <form action="/action_page.php" id="form">
+      <label for="fname">First name:</label><br />
+      <input type="text" id="fname" name="fname" value="" /><br />
+      <input type="submit" value="Submit" />
+    </form>
+    <a href="http://localhost:3000/"> retour vers la page d'accueil </a>
+  </body>
+  <script>
+    const form = document.querySelector('#form')
+    form.addEventListener('submit', (e) => {
+      e.preventDefault()
+      const name = document.querySelector('#fname').value
+      postData('http://localhost:3000/', { name: name }).then((donnees) => {
+        console.log(donnees) // Les données JSON analysées par l'appel `donnees.json()`
+      })
+      // GERER LE POST ICI
+    })
+
+    async function postData(url = '', donnees = {}) {
+      // Les options par défaut sont indiquées par *
+      const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(donnees), // le type utilisé pour le corps doit correspondre à l'en-tête "Content-Type"
+      })
+      return await response // transforme la réponse JSON reçue en objet JavaScript natif
+    }
+  </script>
+</html>

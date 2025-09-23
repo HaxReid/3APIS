@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Ma todo list</h1>
+    <ul id="list"></ul>
+    <form action="http://localhost:3000/" id="form">
+      <label for="todo">Ajouter :</label><br />
+      <input type="text" id="todo" name="todo" value="" /><br />
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
+  <script>
+    const form = document.querySelector("#form");
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const todo = document.querySelector("#todo").value;
+      postData("http://localhost:3000/api/todos", { todo: todo }).then(
+        (donnees) => {
+          console.log(donnees); // Les données JSON analysées par l'appel `donnees.json()`
+          document.querySelector("#form").reset();
+          location.reload();
+        }
+      );
+      // GERER LE POST ICI
+    });
+    document.querySelector("#list").addEventListener("click", (e) => {
+      deleteTodo(e.target.innerText).then(location.reload);
+    });
+    getTodos();
+    async function getTodos() {
+      const response = await fetch("http://localhost:3000/api/todos", {
+        method: "GET",
+        mode: "cors", // no-cors, *cors, same-origin
+      });
+
+      const todoList = await response.json();
+      // const response = ["Faire la vaisselle", "Faire une sieste"];
+      const list = document.querySelector("#list");
+      todoList.forEach((todo) => {
+        const li = document.createElement("li");
+        li.textContent = todo;
+        list.appendChild(li);
+      });
+    }
+
+    async function deleteTodo(toDoText) {
+      const response = await fetch("http://localhost:3000/api/todos", {
+        method: "DELETE",
+        mode: "cors", // no-cors, *cors, same-origin
+        body: JSON.stringify({ todo: toDoText }),
+      });
+    }
+
+    async function postData(url = "", donnees = {}) {
+      // Les options par défaut sont indiquées par *
+      const response = await fetch(url, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(donnees), // le type utilisé pour le corps doit correspondre à l'en-tête "Content-Type"
+      });
+      return await response; // transforme la réponse JSON reçue en objet JavaScript natif
+    }
+  </script>
+</html>
